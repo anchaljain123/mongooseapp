@@ -12,4 +12,4 @@ connectionTwo.on('error',function(err,data) {
     console.log('*Could not connect to Mongoose*',err);
 });
 
-//require('./../api/users/user.model1');
+require('./../api/users/user.model1');

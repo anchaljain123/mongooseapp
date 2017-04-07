@@ -13,5 +13,5 @@ connectionOne.on('error',function(err,data) {
 });
 
 module.exports = connectionOne;
-//require('./../api/users/user.model');
+require('./../api/users/user.model');
 

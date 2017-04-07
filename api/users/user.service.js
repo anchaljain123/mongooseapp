@@ -1,18 +1,20 @@
 
 var connectionOne = require('./../../config/data');
+insertDb = connectionOne.model('User');
 var User = require('./user.model');
 var connectionTwo = require('./../../config/dataSource');
+copyDb = connectionTwo.model('copyUser');
 var copyUser = require('./user.model1');
 /*var User = require('./user.model');
 var copyUser = require('./user.model1');*/
 
 
-exports.insertDocuments = function (userData) {
+const insertDocuments = function (userData) {
 
     var counter = 0;
     for(i in userData) {
 
-        User.create(userData[i], function (err, data) {
+        insertDb.create(userData[i], function (err, data) {
             if (err) {
                 console.log({msg: "Something went wrong in post :", error: err});
             }
@@ -20,7 +22,7 @@ exports.insertDocuments = function (userData) {
                 counter++;
                 console.log('counter-->',counter)
                 if (counter === 3) {
-                    exports.copy()
+                  copy()
                 }
                 console.log("Successfully Inserted Data:",data );
             }
@@ -28,11 +30,12 @@ exports.insertDocuments = function (userData) {
 
     }
 
-};
+}
 
-exports.copy = function () {
+
+  function copy () {
     var resultDocuments;
-    User.find({},function (err, data) {
+    insertDb.find({},function (err, data) {
         if(err){
             console.log({msg: "Something went wrong",error: err});
         }
@@ -40,28 +43,29 @@ exports.copy = function () {
             resultDocuments = data;
 
             for(i in resultDocuments) {
+                console.log('data ------------',resultDocuments[i])
 
-                var obj = new copyUser(resultDocuments[i])
-
-                obj.save(function (err) {
-                    if (err) console.log(err)
-                    console.log('done')
+                var obj ={
+                    "grant_title":resultDocuments[i].grant_title,
+                    "id":resultDocuments[i].id,
+                    "total_amount":resultDocuments[i].total_amount
+                }
+                copyDb.create(obj, function (err, data) {
+                    if (err) {
+                        console.log({msg: "Something went wrong in copying :", error: err});
+                    }
+                    else {
+                        console.log("Successfully Copy Data:",data );
+                    }
                 })
-
-                // copyUser.create(resultDocuments[i], function (err, data) {
-                //     if (err) {
-                //         console.log({msg: "Something went wrong in copying :", error: err});
-                //     }
-                //     else {
-                //         console.log("Successfully Copy Data:",data );
-                //     }
-                // })
             }
         }
 
     });
 
 }
+//insertDocuments();
+
 
 
 
