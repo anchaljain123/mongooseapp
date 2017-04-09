@@ -5,22 +5,16 @@ var User = require('./user.model');
 var connectionTwo = require('./../../config/dataSource');
 copyDb = connectionTwo.model('copyUser');
 var copyUser = require('./user.model1');
-/*var User = require('./user.model');
-var copyUser = require('./user.model1');*/
 
-
-const insertDocuments = function (userData) {
-
+exports.insertDocuments = function (userData) {
     var counter = 0;
     for(i in userData) {
-
         insertDb.create(userData[i], function (err, data) {
             if (err) {
                 console.log({msg: "Something went wrong in post :", error: err});
             }
             else {
                 counter++;
-                console.log('counter-->',counter)
                 if (counter === 3) {
                   copy()
                 }
@@ -41,21 +35,18 @@ const insertDocuments = function (userData) {
         }
         else{
             resultDocuments = data;
-
             for(i in resultDocuments) {
-                console.log('data ------------',resultDocuments[i])
-
-                var obj ={
-                    "grant_title":resultDocuments[i].grant_title,
-                    "id":resultDocuments[i].id,
-                    "total_amount":resultDocuments[i].total_amount
+                var obj = {
+                    "grant_title": resultDocuments[i].grant_title,
+                    "id": resultDocuments[i].id,
+                    "total_amount": resultDocuments[i].total_amount,
                 }
                 copyDb.create(obj, function (err, data) {
                     if (err) {
                         console.log({msg: "Something went wrong in copying :", error: err});
                     }
                     else {
-                        console.log("Successfully Copy Data:",data );
+                        console.log("Successfully Copy Data:");
                     }
                 })
             }
@@ -64,7 +55,7 @@ const insertDocuments = function (userData) {
     });
 
 }
-//insertDocuments();
+
 
 
 
